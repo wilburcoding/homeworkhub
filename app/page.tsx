@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 export default function Home() {
-  
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	">
       <div className="bg-slate-800 w-4/5 max-w-screen-md border-gray-800 rounded-lg border p-4 mb-3 duration-500 hover:scale-105">
@@ -58,14 +58,19 @@ export default function Home() {
             <input type="text" className="bg-slate-700 outline-none w-full border-b border-b-gray-500 my-2" placeholder="New Task"></input>
           </div>
           <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2">
-            <div className="w-5 h-5 rounded-lg border border-gray-100 mr-2"></div>    
-            <div className="flex flex-col">
-              <input type="text" className="bg-slate-700 outline-none w-3/4 my-2 mb-0"></input>
-              <div className="flex flex-row">
-                <p className="text-xs text-gray-300 mt-0 mb-1">Due 10/5</p>
-                <FontAwesomeIcon icon={faPen} />
+            <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
+              <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400">
+                <FontAwesomeIcon icon={faCheck} className="text-xs w-5 h-5 rounded-lg leading-5  my-0" />
+
               </div>
-            </div>          
+            </div>
+            <div className="flex flex-col">
+              <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1"></input>
+              <div className="flex flex-row items-center mb-1">
+                <p className="text-xs text-gray-300 mt-0 mr-1">Due 10/5</p>
+                <FontAwesomeIcon icon={faPen} className="text-xs text-gray-400 opacity-5 hover:opacity-100 duration-300" />
+              </div>
+            </div>
           </div>
         </div>
 
