@@ -11,9 +11,7 @@ export default function Home() {
     if (e.keyCode == 13) {
       handler.add(e.target.value)
       e.target.value = ""
-      console.log(handler.tasks)
-      setTasks(handler.tasks);
-      console.log(tasks)
+      setTasks(handler.tasks.filter((task) => task.name != ""));
     }
   }
   useEffect(function () {
