@@ -31,7 +31,7 @@ export default function Home() {
     }, 20)
     setTimeout(function () {
       clearInterval(fade);
-    }, 300A)
+    }, 300)
 
 
   }
