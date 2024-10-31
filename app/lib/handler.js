@@ -39,6 +39,7 @@ class Handler {
     });
   }
   delete(id) {
+    console.log(id)
     this.tasks = this.tasks.filter(task => task.id!== id);
   }
 }

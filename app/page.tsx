@@ -13,11 +13,31 @@ export default function Home() {
       e.target.value = ""
       setTasks(handler.tasks.filter((task) => task.name != ""));
     }
+
+  }
+  async function handleDelete(id: String) {
+
+    await handler.delete(id)
+    let count = 0;
+    let fade = setInterval(function () {
+      if (count == 10 || document.getElementById(`s${id}`) == null) {
+        setTasks(handler.tasks.filter((task) => task.name != ""));
+        return
+      }
+      document.getElementById(`s${id}`).style.opacity = `${1 - count * 0.1}`
+      count++;
+
+
+    }, 20)
+    setTimeout(function () {
+      clearInterval(fade);
+    }, 300A)
+
+
   }
   useEffect(function () {
   }, [])
   useEffect(function () {
-    console.log("ea")
   }, [tasks.length])
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	">
@@ -75,10 +95,10 @@ export default function Home() {
           {
             tasks.map((task: any) => {
               console.log(task)
-              return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2">
+              return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
-                  <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400">
-                    <FontAwesomeIcon icon={faCheck} className="text-xs w-5 h-5 rounded-lg leading-5  my-0" />
+                  <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400" id={task.id} onClick={() => handleDelete(task.id)}>
+                    <FontAwesomeIcon icon={faCheck} className="text-xs w-5 h-5 rounded-lg leading-5 my-0" />
 
                   </div>
                 </div>
