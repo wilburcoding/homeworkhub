@@ -3,7 +3,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faCheck } from '@fortawesome/free-solid-svg-icons'
 import Handler from "./lib/handler.js";
-import { useState, useEffect, KeyboardEvent } from "react";
+import { useState, useEffect } from "react";
 export default function Home() {
   const [tasks, setTasks]: any = useState([]);
   const [handler, setHandler] = useState(new Handler());
@@ -33,6 +33,13 @@ export default function Home() {
       clearInterval(fade);
     }, 300)
 
+
+  }
+  async function handleNameEdit(e:any) {
+    const id=String(e.target.id).split("input")[1]
+    const val = String(e.target.value);
+    await handler.editName(id, val);
+    setTasks(handler.tasks.filter((task) => task.name != ""));
 
   }
   useEffect(function () {
@@ -103,10 +110,18 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name}></input>
+                  <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
                   <div className="flex flex-row items-center mb-1">
-                    <p className="text-xs text-gray-300 mt-0 mr-1">Due 10/5</p>
-                    <FontAwesomeIcon icon={faPen} className="text-xs text-gray-400 opacity-5 hover:opacity-100 duration-300" />
+                    <p className="text-xs text-gray-300 mt-0 mr-1">Due</p>
+                    <input type="date" className="bg-transparent outline-non text-xs text-white" />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                        </svg>
+                      </div>
+                      <input id="datepicker-range-start" name="start" type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start"/>
+                    </div>
                   </div>
                 </div>
               </div>
