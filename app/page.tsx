@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 export default function Home() {
   
@@ -54,17 +54,19 @@ export default function Home() {
           Active Assignments
         </p>
         <div className="w-4/5 flex items-center flex-col">
-          <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center">
-            <div className="w-5 h-5 rounded-lg border border-gray-100 mr-1"></div>              
-            <input type="text" className="bg-slate-700 outline-none w-3/4 border-b border-b-gray-500 my-2"></input>
-            <div className="w-1 border-r border-r-gray-300 h-8 ml-3"></div>
-            <div className="flex mr-0 ml-auto flex-row items-center justify-center w-1/5 h-10 ml-0 ">
-              <p className="ml-2 text-sm">Due 10/5</p>
-              <FontAwesomeIcon icon={faCalendarDays} className="fa-fw text-lg mr-2" />
-
-            </div>
+          <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2 pr-2">
+            <input type="text" className="bg-slate-700 outline-none w-full border-b border-b-gray-500 my-2" placeholder="New Task"></input>
           </div>
-
+          <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2">
+            <div className="w-5 h-5 rounded-lg border border-gray-100 mr-2"></div>    
+            <div className="flex flex-col">
+              <input type="text" className="bg-slate-700 outline-none w-3/4 my-2 mb-0"></input>
+              <div className="flex flex-row">
+                <p className="text-xs text-gray-300 mt-0 mb-1">Due 10/5</p>
+                <FontAwesomeIcon icon={faPen} />
+              </div>
+            </div>          
+          </div>
         </div>
 
       </div>
