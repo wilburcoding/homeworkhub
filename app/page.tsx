@@ -8,7 +8,7 @@ export default function Home() {
   const [tasks, setTasks]: any = useState([]);
   const [handler, setHandler] = useState(new Handler(JSON.stringify({ data: [] })));
   async function updateLocalStorage() {
-    localStorage.setItem("tasks", JSON.stringify({data:handler.tasks}));
+    localStorage.setItem("tasks", JSON.stringify({ data: handler.tasks }));
 
   }
   async function handleNewTask(e: any) {
@@ -56,11 +56,12 @@ export default function Home() {
     updateLocalStorage();
   }
   useEffect(function () {
-    setHandler(new Handler(JSON.parse(localStorage.getItem("tasks")) || JSON.stringify({ data: [] })));
+    setHandler(new Handler(localStorage.getItem("tasks") || JSON.stringify({ data: [] })));
   }, [])
   useEffect(function () {
+    setTasks(handler.tasks.filter((task) => task.name != ""));
 
-  }, [tasks])
+  }, [handler])
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	text-white  ">
       <div className="bg-slate-800 w-4/5 max-w-screen-md border-gray-800 rounded-lg border p-4 mb-3 duration-500 hover:scale-105">
