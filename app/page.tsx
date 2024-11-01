@@ -3,7 +3,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faCheck } from '@fortawesome/free-solid-svg-icons'
 import Handler from "./lib/handler.js";
-import { useState, useEffect } from "react";
+import { useState, useEffect, KeyboardEvent } from "react";
 export default function Home() {
   const [tasks, setTasks]: any = useState([]);
   const [handler, setHandler] = useState(new Handler());
@@ -35,6 +35,10 @@ export default function Home() {
 
 
   }
+  async function handleDueDateEdit(e:any) {
+    const date = new Date(String(e.target.value))
+    console.log(date)
+  }
   async function handleNameEdit(e:any) {
     const id=String(e.target.id).split("input")[1]
     const val = String(e.target.value);
@@ -47,7 +51,7 @@ export default function Home() {
   useEffect(function () {
   }, [tasks.length])
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	">
+    <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	text-white  ">
       <div className="bg-slate-800 w-4/5 max-w-screen-md border-gray-800 rounded-lg border p-4 mb-3 duration-500 hover:scale-105">
         <h1 className="text-4xl font-bold text-center">Homework Hub</h1>
         <div className="w-full rounded-lg flex flex-row p-1 justify-center">
@@ -101,7 +105,9 @@ export default function Home() {
           </div>
           {
             tasks.map((task: any) => {
-              console.log(task)
+              let options:any = { day: "2-digit", month: "2-digit", year: "numeric" };
+              const date = new Date(task.dueDate);
+              const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
                   <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400" id={task.id} onClick={() => handleDelete(task.id)}>
@@ -112,16 +118,8 @@ export default function Home() {
                 <div className="flex flex-col">
                   <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
                   <div className="flex flex-row items-center mb-1">
-                    <p className="text-xs text-gray-300 mt-0 mr-1">Due</p>
-                    <input type="date" className="bg-transparent outline-non text-xs text-white" />
-                    <div className="relative">
-                      <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                        </svg>
-                      </div>
-                      <input id="datepicker-range-start" name="start" type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start"/>
-                    </div>
+                    <p className="text-xs text-gray-300 mt-0 mr-0">Due</p>
+                    <input type="date" className="bg-transparent outline-non text-xs text-white" defaultValue={start} min={start} onChange={handleDueDateEdit}/>
                   </div>
                 </div>
               </div>
