@@ -6,12 +6,17 @@ import Handler from "./lib/handler.js";
 import { useState, useEffect, KeyboardEvent } from "react";
 export default function Home() {
   const [tasks, setTasks]: any = useState([]);
-  const [handler, setHandler] = useState(new Handler());
+  const [handler, setHandler] = useState(new Handler(JSON.stringify({ data: [] })));
+  async function updateLocalStorage() {
+    localStorage.setItem("tasks", JSON.stringify({ data: handler.tasks }));
+
+  }
   async function handleNewTask(e: any) {
     if (e.keyCode == 13) {
       handler.add(e.target.value)
       e.target.value = ""
-      setTasks(handler.tasks.filter((task) => task.name != ""));
+      await setTasks(handler.tasks.filter((task) => task.name != ""));
+      await updateLocalStorage();
     }
 
   }
@@ -22,6 +27,7 @@ export default function Home() {
     let fade = setInterval(function () {
       if (count == 10 || document.getElementById(`s${id}`) == null) {
         setTasks(handler.tasks.filter((task) => task.name != ""));
+        updateLocalStorage();
         return
       }
       document.getElementById(`s${id}`).style.opacity = `${1 - count * 0.1}`
@@ -35,12 +41,29 @@ export default function Home() {
 
 
   }
+  async function handleDueDateEdit(e: any) {
+    const date = new Date(String(e.target.value).replaceAll("-", "/"));
+    await handler.editTime(e.target.id.split("due")[1], date.getTime());
+    setTasks(handler.tasks.filter((task) => task.name != ""));
+    updateLocalStorage();
+
+  }
+  async function handleNameEdit(e: any) {
+    const id = String(e.target.id).split("input")[1]
+    const val = String(e.target.value);
+    await handler.editName(id, val);
+    setTasks(handler.tasks.filter((task) => task.name != ""));
+    updateLocalStorage();
+  }
   useEffect(function () {
+    setHandler(new Handler(localStorage.getItem("tasks") || JSON.stringify({ data: [] })));
   }, [])
   useEffect(function () {
-  }, [tasks.length])
+    setTasks(handler.tasks.filter((task) => task.name != ""));
+
+  }, [handler])
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	">
+    <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-slate-900 duration-500	text-white  ">
       <div className="bg-slate-800 w-4/5 max-w-screen-md border-gray-800 rounded-lg border p-4 mb-3 duration-500 hover:scale-105">
         <h1 className="text-4xl font-bold text-center">Homework Hub</h1>
         <div className="w-full rounded-lg flex flex-row p-1 justify-center">
@@ -94,7 +117,9 @@ export default function Home() {
           </div>
           {
             tasks.map((task: any) => {
-              console.log(task)
+              let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
+              const date = new Date(task.dueDate);
+              const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
                   <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400" id={task.id} onClick={() => handleDelete(task.id)}>
@@ -103,10 +128,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name}></input>
+                  <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
                   <div className="flex flex-row items-center mb-1">
-                    <p className="text-xs text-gray-300 mt-0 mr-1">Due 10/5</p>
-                    <FontAwesomeIcon icon={faPen} className="text-xs text-gray-400 opacity-5 hover:opacity-100 duration-300" />
+                    <p className="text-xs text-gray-300 mt-0 mr-0">Due</p>
+                    <input type="date" className="bg-transparent outline-non text-xs text-white" id={`due${task.id}`} defaultValue={start} min={start} onChange={handleDueDateEdit} />
                   </div>
                 </div>
               </div>

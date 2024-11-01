@@ -5,7 +5,7 @@ class Handler {
 
   constructor(local) {
     //Process localStorage here
-    this.tasks = [];
+    this.tasks = JSON.parse(String(local)).data;
   }
   idGen() {
     let characters = [];

@@ -15,13 +15,18 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+input[type="date"] {
+  outline:none;
+  color-scheme:dark;
+  margin:0;
+  text-align: center;
+  width:95px;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  outline:none;
+  color: rgb(255, 255, 255);
+  opacity: 1;
+  margin-left:0;
+  margin-right:auto;
+  color-scheme: dark;
 }
