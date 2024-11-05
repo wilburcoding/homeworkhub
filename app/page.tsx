@@ -135,8 +135,8 @@ export default function Home() {
                   <div className="flex flex-row w-full items-center pt-1">
                     <input type="text" className="bg-slate-700 outline-none w-full mt-1 h-4" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
                     <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4">
-                      <option value="assignment" className="hover:bg-slate-600">Assignment</option>
-                      <option value="assessment">Assessment</option>
+                      <option value="assignment" className="hover:bg-slate-600" defaultChecked={false}>Assignment</option>
+                      <option value="assessment" selected={task.type == 2 ? true : false}>Assessment</option>
                     </select>
                   </div>
                   <div className="flex flex-row items-center mb-1">
