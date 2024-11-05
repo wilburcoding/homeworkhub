@@ -7,10 +7,12 @@ class Handler {
     //Process localStorage here
     this.tasks = JSON.parse(String(local)).data;
     for (let i = 0; i < this.tasks.length; i++) {
-      console.log(new Date())
-      console.log(new Date(this.tasks[i].dueDate))
-      if (new Date(this.tasks[i].dueDate).getDate() < new Date().getDate()) {
-        this.tasks[i].dueDate = Date.now() - 5 * 3600000;
+      const td = new Date(this.tasks[i].dueDate);
+      const ty = new Date()
+      if (td.getTime() < Date.now() && td.getDate() != ty.getDate() && td.getMonth() != ty.getMonth() && td.getFullYear() != ty.getFullYear()) {
+
+        this.tasks[i].dueDate = Date.now();
+        console.log("yes")
       }
     }
   }
@@ -22,12 +24,9 @@ class Handler {
     return characters.join('');
   }
   add(name, type) {
-    console.log(this.tasks)
-
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.tasks.push({ "name": name, "dueDate": tomorrow.getTime(), id:this.idGen(),"type":type })
-    console.log(this.tasks)
   }
   editTime(id, newTime) {
     //To be changed
@@ -53,7 +52,6 @@ class Handler {
     });
   }
   delete(id) {
-    console.log(id)
     this.tasks = this.tasks.filter(task => task.id!== id);
   }
 }

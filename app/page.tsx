@@ -66,6 +66,8 @@ export default function Home() {
   }
   useEffect(function () {
     setHandler(new Handler(localStorage.getItem("tasks") || JSON.stringify({ data: [] })));
+    setTasks(handler.tasks.filter((task) => task.name != ""));
+
   }, [])
   useEffect(function () {
     setTasks(handler.tasks.filter((task) => task.name != ""));
@@ -135,12 +137,9 @@ export default function Home() {
             tasks.map((task: any) => {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
-              console.log(date)
               const startDate = new Date(Date.now());
               const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 10 ? "0" : "") + (startDate.getDate() )}`;
               const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + (date.getDate() )}`;
-              console.log(sdstring)
-              console.log(start)
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
                   <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400" id={task.id} onClick={() => handleDelete(task.id)}>
@@ -151,9 +150,9 @@ export default function Home() {
                 <div className="flex flex-col w-full">
                   <div className="flex flex-row w-full items-center pt-1">
                     <input type="text" className="bg-slate-700 outline-none w-full mt-1 h-4" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
-                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4" id={`type${task.id}`} onChange={handleTypeEdit}>
+                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4" defaultValue={["assignment", "assessment"][task.type-1]} id={`type${task.id}`} onChange={handleTypeEdit}>
                       <option value="assignment" className="hover:bg-slate-600" defaultChecked={false}>Assignment</option>
-                      <option value="assessment" selected={task.type == 2 ? true : false}>Assessment</option>
+                      <option value="assessment">Assessment</option>
                     </select>
                   </div>
                   <div className="flex flex-row items-center mb-1">
