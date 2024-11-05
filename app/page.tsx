@@ -65,8 +65,10 @@ export default function Home() {
       console.log(json);
       const assignments = [];
       for (const item of json.response) {
-        if (tasks.map((it: any) => { return it.name }).includes(item)) {
-          assignments.push(item);
+        if (tasks.map((it: any) => { return it.id }).includes(item)) {
+          assignments.push({
+            id:item,
+          });
         }
       }
       if (assignments.length == tasks.length) {
@@ -75,10 +77,9 @@ export default function Home() {
         setError("An error occured during AI prioritization")
       }
     } catch (e) {
+      console.error(e)
       setError("An error occured during AI prioritization")
-
     }
-
   }
   async function handleNameEdit(e: any) {
     const id = String(e.target.id).split("input")[1]
