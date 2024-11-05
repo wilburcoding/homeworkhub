@@ -6,6 +6,7 @@ import Handler from "./lib/handler.js";
 import { useState, useEffect, KeyboardEvent } from "react";
 export default function Home() {
   const [tasks, setTasks]: any = useState([]);
+  const [alist, setAList] = useState([]);
   const [handler, setHandler] = useState(new Handler(JSON.stringify({ data: [] })));
   async function updateLocalStorage() {
     localStorage.setItem("tasks", JSON.stringify({ data: handler.tasks }));
@@ -20,6 +21,7 @@ export default function Home() {
     }
 
   }
+  
   async function handleDelete(id: String) {
 
     await handler.delete(id)
@@ -39,6 +41,12 @@ export default function Home() {
       clearInterval(fade);
     }, 300)
 
+
+  }
+  async function handleTypeEdit(e: any) {
+    await handler.editType(e.target.id.split("type")[1], (e.target.value == "assessment" ? 2 : 1));
+    setTasks(handler.tasks.filter((task) => task.name != ""));
+    updateLocalStorage();
 
   }
   async function handleDueDateEdit(e: any) {
@@ -68,7 +76,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-center">Homework Hub</h1>
         <div className="w-full rounded-lg flex flex-row p-1 justify-center">
           <div className="bg-slate-700 w-1/3 rounded-lg flex flex-col items-center mr-1 p-2">
-            <h1 className="text-4xl font-bold">5</h1>
+            <h1 className="text-4xl font-bold">{tasks.filter((item) => item.type == 1).length}</h1>
             <h1>Assignments</h1>
           </div>
           <div className="bg-slate-700 w-1/3 rounded-lg flex flex-col items-center p-2">
@@ -124,7 +132,6 @@ export default function Home() {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
               const startDate = new Date(Date.now() - 27 * 3600000);
-              console.log(startDate)
               const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 9 ? "0" : "") + (startDate.getDate() + 1)}`;
               const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
@@ -137,7 +144,7 @@ export default function Home() {
                 <div className="flex flex-col w-full">
                   <div className="flex flex-row w-full items-center pt-1">
                     <input type="text" className="bg-slate-700 outline-none w-full mt-1 h-4" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
-                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4">
+                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4" id={`type${task.id}`} onChange={handleTypeEdit}>
                       <option value="assignment" className="hover:bg-slate-600" defaultChecked={false}>Assignment</option>
                       <option value="assessment" selected={task.type == 2 ? true : false}>Assessment</option>
                     </select>
