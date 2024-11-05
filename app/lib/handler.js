@@ -19,7 +19,7 @@ class Handler {
 
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime() - 3 * 3600000, id:this.idGen(),"type":type })
+    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime() - 24 * 3600000, id:this.idGen(),"type":type })
     console.log(this.tasks)
   }
   editTime(id, newTime) {
