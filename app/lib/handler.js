@@ -14,12 +14,12 @@ class Handler {
     }
     return characters.join('');
   }
-  add(name) {
+  add(name, type) {
     console.log(this.tasks)
 
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime(), id:this.idGen() })
+    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime() - 3 * 3600000, id:this.idGen(),"type":type })
     console.log(this.tasks)
   }
   editTime(id, newTime) {
@@ -30,6 +30,13 @@ class Handler {
       }
     });
 
+  }
+  editType(id, newType) {
+    this.tasks.forEach(task => {
+      if (task.id === id) {
+        task.type = newType;
+      }
+    });
   }
   editName(id, newName) {
     this.tasks.forEach(task => {

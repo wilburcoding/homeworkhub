@@ -13,7 +13,7 @@ export default function Home() {
   }
   async function handleNewTask(e: any) {
     if (e.keyCode == 13) {
-      handler.add(e.target.value)
+      handler.add(e.target.value, document.getElementById("type").value == "assessment" ? 2 : 1)
       e.target.value = ""
       await setTasks(handler.tasks.filter((task) => task.name != ""));
       await updateLocalStorage();
@@ -43,7 +43,7 @@ export default function Home() {
   }
   async function handleDueDateEdit(e: any) {
     const date = new Date(String(e.target.value).replaceAll("-", "/"));
-    await handler.editTime(e.target.id.split("due")[1], date.getTime());
+    await handler.editTime(e.target.id.split("due")[1], date.getTime() - 3 * 3600000);
     setTasks(handler.tasks.filter((task) => task.name != ""));
     updateLocalStorage();
 
@@ -114,11 +114,17 @@ export default function Home() {
         <div className="w-4/5 flex items-center flex-col">
           <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2 pr-2">
             <input type="text" className="bg-slate-700 outline-none w-full border-b border-b-gray-500 my-2" onKeyDown={handleNewTask} placeholder="New Task"></input>
+            <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm ml-2 hover:bg-slate-600" id="type">
+              <option value="assignment" className="hover:bg-slate-600">Assignment</option>
+              <option value="assessment">Assessment</option>
+            </select>
           </div>
           {
             tasks.map((task: any) => {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
+              const startDate = new Date();
+              const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 9 ? "0" : "") + (startDate.getDate() + 1)}`;
               const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
@@ -127,11 +133,17 @@ export default function Home() {
 
                   </div>
                 </div>
-                <div className="flex flex-col">
-                  <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
+                <div className="flex flex-col w-full">
+                  <div className="flex flex-row w-full items-center pt-1">
+                    <input type="text" className="bg-slate-700 outline-none w-full mt-1 h-4" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
+                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4">
+                      <option value="assignment" className="hover:bg-slate-600" defaultChecked={false}>Assignment</option>
+                      <option value="assessment" selected={task.type == 2 ? true : false}>Assessment</option>
+                    </select>
+                  </div>
                   <div className="flex flex-row items-center mb-1">
                     <p className="text-xs text-gray-300 mt-0 mr-0">Due</p>
-                    <input type="date" className="bg-transparent outline-non text-xs text-white" id={`due${task.id}`} defaultValue={start} min={start} onChange={handleDueDateEdit} />
+                    <input type="date" className="bg-transparent outline-non text-xs text-white" id={`due${task.id}`} defaultValue={start} min={sdstring} onChange={handleDueDateEdit} />
                   </div>
                 </div>
               </div>
