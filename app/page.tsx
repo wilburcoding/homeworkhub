@@ -66,16 +66,17 @@ export default function Home() {
       const assignments = [];
       for (const item of json.response) {
         if (tasks.map((it: any) => { return it.id }).includes(item)) {
-          var found:any = tasks.filter((ite:any) => ite.id == item)[0];
+          var found: any = tasks.filter((ite: any) => ite.id == item)[0];
           console.log(found)
           assignments.push({
-            id:item,
-            name:found.name,
-            dueDate:found.dueDate
+            id: item,
+            name: found.name,
+            dueDate: new Date(found.dueDate)
           });
         }
       }
       if (assignments.length == tasks.length) {
+        setAList(assignments);
         setError("");
       } else {
         setError("An error occured during AI prioritization")
@@ -84,6 +85,18 @@ export default function Home() {
       console.error(e)
       setError("An error occured during AI prioritization")
     }
+  }
+  function formatDay(day: number) {
+    if (day % 10 == 1) {
+      return day + "st";
+    } 
+    if (day % 10 == 2) {
+      return day + "nd";
+    }
+    if (day % 10 == 3) {
+      return day + "rd";
+    }
+    return day + "th";
   }
   async function handleNameEdit(e: any) {
     const id = String(e.target.id).split("input")[1]
@@ -98,6 +111,7 @@ export default function Home() {
 
   }, [])
   useEffect(function () {
+    console.log(alist)
     setTasks(handler.tasks.filter((task) => task.name != ""));
 
   }, [handler])
@@ -120,22 +134,28 @@ export default function Home() {
         <p className="text-lg font-bold text-center mb-1 text-gray-300">
           Assignments <span className={`text-gray-400 ${alist.length < 1 ? "hidden" : ""}`}>{`(${acount}/${alist.length})`}</span>
         </p>
-        <div className="bg-slate-700 w-3/4 rounded-lg flex flex-col items-center mr-1 p-2 hidden" >
-          <p className="text-4xl font-bold text-center mb-1 ">Math Homework</p>
-          <p className="text-2xl font-bold text-center mb-1 font-light mb-2">
-            Due October 29th, 2024
-          </p>
-          <div className="border-gray-400 flex flex-col items-center rounded-lg border p-2 mb-3">
-            <p className="text-4xl font-bold text-center mb-1">0:00</p>
-            <div className="border-gray-400 flex flex-row items-center rounded-lg ">
-              <button className="flex-1 bg-slate-600 rounded-lg px-2 mr-2">
-                Start
-              </button>
-              <button className="flex-1 bg-slate-600 rounded-lg px-2">
-                Reset
-              </button>
-            </div>
-          </div>
+        <div className={`bg-slate-700 w-3/4 rounded-lg flex flex-col items-center mr-1 p-2 ${alist.length < 1 ? "hidden" : ""}`} >
+          {alist.length > 0 ? (
+            <>
+              <p className="text-4xl font-bold text-center mb-1 ">{alist[acount - 1].name}</p>
+              <p className="text-2xl font-bold text-center mb-1 font-light mb-2">
+                Due {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][alist[acount - 1].dueDate.getMonth()] + " " + formatDay(alist[acount - 1].dueDate.getDate()) + ", " + alist[acount - 1].dueDate.getFullYear()} 
+              </p>
+              <div className="border-gray-400 flex flex-col items-center rounded-lg border p-2 mb-3">
+                <p className="text-4xl font-bold text-center mb-1">0:00</p>
+                <div className="border-gray-400 flex flex-row items-center rounded-lg ">
+                  <button className="flex-1 bg-slate-600 rounded-lg px-2 mr-2">
+                    Start
+                  </button>
+                  <button className="flex-1 bg-slate-600 rounded-lg px-2">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </>
+
+          ) : (<></>)}
+
         </div>
         <div className="flex flex-row rounded-lg w-full mt-1 items-center justify-center">
           <button className="bg-slate-600 rounded-lg px-4 py-2 self-start w-28" disabled={true}>
@@ -196,6 +216,6 @@ export default function Home() {
         </div>
 
       </div>
-    </main>
+    </main >
   );
 }
