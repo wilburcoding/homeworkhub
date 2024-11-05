@@ -31,6 +31,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-right:auto;
   color-scheme: dark;
 }
+button {
+  outline:none
+}
+button:hover {
+  
+}
 button:disabled {
   opacity:0.5
 }

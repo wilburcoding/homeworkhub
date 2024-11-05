@@ -51,6 +51,12 @@ class Handler {
       }
     });
   }
+  gen() {
+    return fetch("./api/", {
+      body: JSON.stringify({ username: "example" }),
+      // ...
+    });
+  }
   delete(id) {
     this.tasks = this.tasks.filter(task => task.id!== id);
   }

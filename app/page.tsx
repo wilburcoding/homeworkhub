@@ -57,6 +57,9 @@ export default function Home() {
     updateLocalStorage();
 
   }
+  async function genResults(e: any) { 
+    
+  }
   async function handleNameEdit(e: any) {
     const id = String(e.target.id).split("input")[1]
     const val = String(e.target.value);
@@ -113,7 +116,7 @@ export default function Home() {
           <button className="bg-slate-600 rounded-lg px-4 py-2 self-start w-28" disabled={true}>
             Previous
           </button>
-          <button className="bg-slate-600 rounded-lg px-4 py-2 self-center w-28 mx-2 justify-self-center">
+          <button className="bg-slate-600 rounded-lg px-4 py-2 self-center w-28 mx-2 justify-self-center" >
             Generate
           </button>
           <button className="bg-slate-600 rounded-lg px-4 py-2 self-end w-28" disabled={true}>
