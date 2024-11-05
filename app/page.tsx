@@ -76,6 +76,7 @@ export default function Home() {
         }
       }
       if (assignments.length == tasks.length) {
+        setACount(1);
         setAList(assignments);
         setError("");
       } else {
@@ -104,6 +105,17 @@ export default function Home() {
     await handler.editName(id, val);
     setTasks(handler.tasks.filter((task) => task.name != ""));
     updateLocalStorage();
+  }
+  async function prev(e:any) {
+    if (acount > 1) {
+      setACount(acount -1);
+    }
+
+  }
+  async function next(e:any) {
+    if (acount < alist.length) {
+      setACount(acount + 1);
+    }
   }
   useEffect(function () {
     setHandler(new Handler(localStorage.getItem("tasks") || JSON.stringify({ data: [] })));
@@ -158,13 +170,13 @@ export default function Home() {
 
         </div>
         <div className="flex flex-row rounded-lg w-full mt-1 items-center justify-center">
-          <button className="bg-slate-600 rounded-lg px-4 py-2 self-start w-28" disabled={true}>
+          <button className="bg-slate-600 rounded-lg px-4 py-2 self-start w-28" disabled={alist.length == 0 || acount == 1} onClick={prev}>
             Previous
           </button>
           <button className="bg-slate-600 rounded-lg px-4 py-2 self-center w-28 mx-2 justify-self-center" onClick={genResults}>
             Generate
           </button>
-          <button className="bg-slate-600 rounded-lg px-4 py-2 self-end w-28" disabled={true}>
+          <button className="bg-slate-600 rounded-lg px-4 py-2 self-end w-28" disabled={alist.length == 0 || acount == alist.length} onClick={next}>
             Next
           </button>
         </div>
