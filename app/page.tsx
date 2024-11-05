@@ -123,7 +123,8 @@ export default function Home() {
             tasks.map((task: any) => {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
-              const startDate = new Date();
+              const startDate = new Date(Date.now() - 27 * 3600000);
+              console.log(startDate)
               const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 9 ? "0" : "") + (startDate.getDate() + 1)}`;
               const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
