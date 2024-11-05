@@ -57,7 +57,7 @@ class Handler {
       let dat = new Date(item.dueDate);
       data.data.push({
         name:item.name,
-        dueDate: dat.getMonth() + "/" + dat.getDay() + "/" + dat.getFullYear()
+        dueDate: dat.getMonth() + "/" + dat.getDate() + "/" + dat.getFullYear()
       })
     }
     console.log(data)
