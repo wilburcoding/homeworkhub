@@ -52,9 +52,18 @@ class Handler {
     });
   }
   gen() {
-    return fetch("./api/", {
-      body: JSON.stringify({ username: "example" }),
-      // ...
+    let data = {data:[]}
+    for (var item of this.tasks) {
+      let dat = new Date(item.dueDate);
+      data.data.push({
+        name:item.name,
+        dueDate: dat.getMonth() + "/" + dat.getDay() + "/" + dat.getFullYear()
+      })
+    }
+    console.log(data)
+    return fetch("./api", {
+      body: JSON.stringify(data),
+      method:"POST"
     });
   }
   delete(id) {

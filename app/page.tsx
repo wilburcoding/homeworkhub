@@ -58,6 +58,7 @@ export default function Home() {
 
   }
   async function genResults(e: any) { 
+    const res = await handler.gen();
     
   }
   async function handleNameEdit(e: any) {
