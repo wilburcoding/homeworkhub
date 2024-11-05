@@ -13,7 +13,7 @@ export default function Home() {
   }
   async function handleNewTask(e: any) {
     if (e.keyCode == 13) {
-      handler.add(e.target.value)
+      handler.add(e.target.value, document.getElementById("type").value == "assessment" ? 2 : 1)
       e.target.value = ""
       await setTasks(handler.tasks.filter((task) => task.name != ""));
       await updateLocalStorage();
@@ -114,7 +114,7 @@ export default function Home() {
         <div className="w-4/5 flex items-center flex-col">
           <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2 pr-2">
             <input type="text" className="bg-slate-700 outline-none w-full border-b border-b-gray-500 my-2" onKeyDown={handleNewTask} placeholder="New Task"></input>
-            <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm ml-2 hover:bg-slate-600">
+            <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm ml-2 hover:bg-slate-600" id="type">
               <option value="assignment" className="hover:bg-slate-600">Assignment</option>
               <option value="assessment">Assessment</option>
             </select>

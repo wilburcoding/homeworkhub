@@ -14,12 +14,12 @@ class Handler {
     }
     return characters.join('');
   }
-  add(name) {
+  add(name, type) {
     console.log(this.tasks)
 
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime(), id:this.idGen(),"type":1 })
+    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime(), id:this.idGen(),"type":type })
     console.log(this.tasks)
   }
   editTime(id, newTime) {
