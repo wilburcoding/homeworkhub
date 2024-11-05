@@ -66,8 +66,12 @@ export default function Home() {
       const assignments = [];
       for (const item of json.response) {
         if (tasks.map((it: any) => { return it.id }).includes(item)) {
+          var found:any = tasks.filter((ite:any) => ite.id == item)[0];
+          console.log(found)
           assignments.push({
             id:item,
+            name:found.name,
+            dueDate:found.dueDate
           });
         }
       }
