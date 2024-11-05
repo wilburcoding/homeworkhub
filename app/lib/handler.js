@@ -6,6 +6,13 @@ class Handler {
   constructor(local) {
     //Process localStorage here
     this.tasks = JSON.parse(String(local)).data;
+    for (let i = 0; i < this.tasks.length; i++) {
+      console.log(new Date())
+      console.log(new Date(this.tasks[i].dueDate))
+      if (new Date(this.tasks[i].dueDate).getDate() < new Date().getDate()) {
+        this.tasks[i].dueDate = Date.now() - 5 * 3600000;
+      }
+    }
   }
   idGen() {
     let characters = [];
@@ -19,7 +26,7 @@ class Handler {
 
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime() - 24 * 3600000, id:this.idGen(),"type":type })
+    this.tasks.push({ "name": name, "dueDate": tomorrow.getTime(), id:this.idGen(),"type":type })
     console.log(this.tasks)
   }
   editTime(id, newTime) {

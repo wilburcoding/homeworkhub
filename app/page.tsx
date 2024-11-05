@@ -7,6 +7,7 @@ import { useState, useEffect, KeyboardEvent } from "react";
 export default function Home() {
   const [tasks, setTasks]: any = useState([]);
   const [alist, setAList] = useState([]);
+  const [acount, setACount] = useState(1);
   const [handler, setHandler] = useState(new Handler(JSON.stringify({ data: [] })));
   async function updateLocalStorage() {
     localStorage.setItem("tasks", JSON.stringify({ data: handler.tasks }));
@@ -51,7 +52,7 @@ export default function Home() {
   }
   async function handleDueDateEdit(e: any) {
     const date = new Date(String(e.target.value).replaceAll("-", "/"));
-    await handler.editTime(e.target.id.split("due")[1], date.getTime() - 3 * 3600000);
+    await handler.editTime(e.target.id.split("due")[1], date.getTime());
     setTasks(handler.tasks.filter((task) => task.name != ""));
     updateLocalStorage();
 
@@ -87,9 +88,9 @@ export default function Home() {
       </div>
       <div className="bg-slate-800 w-4/5 max-w-screen-md border-gray-400 flex flex-col items-center rounded-lg duration-500	border p-4 hover:scale-105 mb-3">
         <p className="text-lg font-bold text-center mb-1 text-gray-300">
-          Assignments <span className="text-gray-400">(1/5)</span>
+          Assignments <span className={`text-gray-400 ${alist.length < 1 ? "hidden" : ""}`}>{`(${acount}/${alist.length})`}</span>
         </p>
-        <div className="bg-slate-700 w-3/4 rounded-lg flex flex-col items-center mr-1 p-2">
+        <div className="bg-slate-700 w-3/4 rounded-lg flex flex-col items-center mr-1 p-2 hidden" >
           <p className="text-4xl font-bold text-center mb-1 ">Math Homework</p>
           <p className="text-2xl font-bold text-center mb-1 font-light mb-2">
             Due October 29th, 2024
@@ -106,11 +107,14 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex flex-row rounded-lg w-full -mt-5">
-          <button className="bg-slate-600 rounded-lg px-4 py-2 mr-2 w-28">
+        <div className="flex flex-row rounded-lg w-full mt-1 items-center justify-center">
+          <button className="bg-slate-600 rounded-lg px-4 py-2 self-start w-28" disabled={true}>
             Previous
           </button>
-          <button className="bg-slate-600 rounded-lg px-4 py-2 mr-1 ml-auto w-28">
+          <button className="bg-slate-600 rounded-lg px-4 py-2 self-center w-28 mx-2 justify-self-center">
+            Generate
+          </button>
+          <button className="bg-slate-600 rounded-lg px-4 py-2 self-end w-28" disabled={true}>
             Next
           </button>
         </div>
@@ -131,9 +135,12 @@ export default function Home() {
             tasks.map((task: any) => {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
-              const startDate = new Date(Date.now() - 27 * 3600000);
-              const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 9 ? "0" : "") + (startDate.getDate() + 1)}`;
-              const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
+              console.log(date)
+              const startDate = new Date(Date.now());
+              const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 10 ? "0" : "") + (startDate.getDate() )}`;
+              const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + (date.getDate() )}`;
+              console.log(sdstring)
+              console.log(start)
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
                   <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400" id={task.id} onClick={() => handleDelete(task.id)}>
