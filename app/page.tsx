@@ -43,7 +43,7 @@ export default function Home() {
   }
   async function handleDueDateEdit(e: any) {
     const date = new Date(String(e.target.value).replaceAll("-", "/"));
-    await handler.editTime(e.target.id.split("due")[1], date.getTime());
+    await handler.editTime(e.target.id.split("due")[1], date.getTime() - 3 * 3600000);
     setTasks(handler.tasks.filter((task) => task.name != ""));
     updateLocalStorage();
 
@@ -123,6 +123,8 @@ export default function Home() {
             tasks.map((task: any) => {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
+              const startDate = new Date();
+              const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 9 ? "0" : "") + (startDate.getDate() + 1)}`;
               const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 9 ? "0" : "") + (date.getDate() + 1)}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
@@ -141,7 +143,7 @@ export default function Home() {
                   </div>
                   <div className="flex flex-row items-center mb-1">
                     <p className="text-xs text-gray-300 mt-0 mr-0">Due</p>
-                    <input type="date" className="bg-transparent outline-non text-xs text-white" id={`due${task.id}`} defaultValue={start} min={start} onChange={handleDueDateEdit} />
+                    <input type="date" className="bg-transparent outline-non text-xs text-white" id={`due${task.id}`} defaultValue={start} min={sdstring} onChange={handleDueDateEdit} />
                   </div>
                 </div>
               </div>
