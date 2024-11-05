@@ -8,6 +8,7 @@ export default function Home() {
   const [tasks, setTasks]: any = useState([]);
   const [alist, setAList] = useState([]);
   const [acount, setACount] = useState(1);
+  const [error, setError] = useState("");
   const [handler, setHandler] = useState(new Handler(JSON.stringify({ data: [] })));
   async function updateLocalStorage() {
     localStorage.setItem("tasks", JSON.stringify({ data: handler.tasks }));
@@ -22,7 +23,7 @@ export default function Home() {
     }
 
   }
-  
+
   async function handleDelete(id: String) {
 
     await handler.delete(id)
@@ -57,18 +58,26 @@ export default function Home() {
     updateLocalStorage();
 
   }
-  async function genResults(e: any) { 
-    const res = await handler.gen();
-    const json = await res.json()
-    console.log(json);
-    //Clean data
-    const assignments = [];
-    for (const item of json.response) {
-      if (tasks.map((it:any) => { return it.name }).includes(item)) {
-        assignments.push(item);
+  async function genResults(e: any) {
+    try {
+      const res = await handler.gen();
+      const json = await res.json()
+      console.log(json);
+      const assignments = [];
+      for (const item of json.response) {
+        if (tasks.map((it: any) => { return it.name }).includes(item)) {
+          assignments.push(item);
+        }
       }
+      if (assignments.length == tasks.length) {
+        setError("");
+      } else {
+        setError("An error occured during AI prioritization")
+      }
+    } catch (e) {
+      setError("An error occured during AI prioritization")
+
     }
-    console.log(assignments)
 
   }
   async function handleNameEdit(e: any) {
@@ -134,6 +143,7 @@ export default function Home() {
             Next
           </button>
         </div>
+        <p className="text-sm m-0 text-red-400" >{error}</p>
       </div>
       <div className="bg-slate-800 w-4/5 max-w-screen-md flex flex-col items-center border-gray-800 rounded-lg border p-5 mb-3 hover:scale-105 duration-500">
         <p className="text-lg font-bold text-center mb-1 text-gray-300">
@@ -152,8 +162,8 @@ export default function Home() {
               let options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
               const date = new Date(task.dueDate);
               const startDate = new Date(Date.now());
-              const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 10 ? "0" : "") + (startDate.getDate() )}`;
-              const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + (date.getDate() )}`;
+              const sdstring = `${startDate.getFullYear()}-${(startDate.getMonth() < 9 ? "0" : "") + (startDate.getMonth() + 1)}-${(startDate.getDate() < 10 ? "0" : "") + (startDate.getDate())}`;
+              const start = `${date.getFullYear()}-${(date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)}-${(date.getDate() < 10 ? "0" : "") + (date.getDate())}`;
               return <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2" key={task.id} id={`s${task.id}`}>
                 <div className="flex w-5 h-5 rounded-lg border border-gray-100 mr-2 items-center justify-center p-0">
                   <div className="w-5 h-5 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 duration-300 bg-green-400" id={task.id} onClick={() => handleDelete(task.id)}>
@@ -164,7 +174,7 @@ export default function Home() {
                 <div className="flex flex-col w-full">
                   <div className="flex flex-row w-full items-center pt-1">
                     <input type="text" className="bg-slate-700 outline-none w-full mt-1 h-4" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
-                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4" defaultValue={["assignment", "assessment"][task.type-1]} id={`type${task.id}`} onChange={handleTypeEdit}>
+                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4" defaultValue={["assignment", "assessment"][task.type - 1]} id={`type${task.id}`} onChange={handleTypeEdit}>
                       <option value="assignment" className="hover:bg-slate-600" defaultChecked={false}>Assignment</option>
                       <option value="assessment">Assessment</option>
                     </select>
