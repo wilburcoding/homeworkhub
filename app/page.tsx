@@ -61,6 +61,14 @@ export default function Home() {
     const res = await handler.gen();
     const json = await res.json()
     console.log(json);
+    //Clean data
+    const assignments = [];
+    for (const item of json.response) {
+      if (tasks.map((it:any) => { return it.name }).includes(item)) {
+        assignments.push(item);
+      }
+    }
+    console.log(assignments)
 
   }
   async function handleNameEdit(e: any) {
