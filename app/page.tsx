@@ -114,6 +114,10 @@ export default function Home() {
         <div className="w-4/5 flex items-center flex-col">
           <div className="bg-slate-700 w-full rounded-lg pl-2 flex flex-row pr-0 items-center mb-2 pr-2">
             <input type="text" className="bg-slate-700 outline-none w-full border-b border-b-gray-500 my-2" onKeyDown={handleNewTask} placeholder="New Task"></input>
+            <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm ml-2 hover:bg-slate-600">
+              <option value="assignment" className="hover:bg-slate-600">Assignment</option>
+              <option value="assessment">Assessment</option>
+            </select>
           </div>
           {
             tasks.map((task: any) => {
@@ -127,8 +131,14 @@ export default function Home() {
 
                   </div>
                 </div>
-                <div className="flex flex-col">
-                  <input type="text" className="bg-slate-700 outline-none w-3/4 mt-1" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
+                <div className="flex flex-col w-full">
+                  <div className="flex flex-row w-full items-center pt-1">
+                    <input type="text" className="bg-slate-700 outline-none w-full mt-1 h-4" defaultValue={task.name} id={`input${task.id}`} onChange={handleNameEdit}></input>
+                    <select className="bg-slate-600 p-1 outline-none hover:border-gray-500 rounded-lg text-sm hover:bg-slate-600 ml-2 mr-2 -mb-4">
+                      <option value="assignment" className="hover:bg-slate-600">Assignment</option>
+                      <option value="assessment">Assessment</option>
+                    </select>
+                  </div>
                   <div className="flex flex-row items-center mb-1">
                     <p className="text-xs text-gray-300 mt-0 mr-0">Due</p>
                     <input type="date" className="bg-transparent outline-non text-xs text-white" id={`due${task.id}`} defaultValue={start} min={start} onChange={handleDueDateEdit} />
